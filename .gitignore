@@ -1,0 +1,57 @@
+# ---- Build output ----
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+arm64/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.binlog
+
+# ---- Visual Studio / Rider / VS Code ----
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# ---- NuGet ----
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.assets.json
+*.nuget.dgspec.json
+
+# ---- OS ----
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.lnk
+
+# ---- Local config that must never be committed ----
+appsettings.Development.local.json
+*.local.json
+
+# ---- Material excluded from this repository ----
+# These carry third-party licensing and are intentionally not distributed.
+# See docs/ASSET-LICENSES.md for the reasoning behind each exclusion.
+src/AirDeck/assets/fonts/
+src/AirDeck/assets/wallpapers/
+src/AirDeck/assets/icon-packs/
+src/AirDeck/assets/IconPacks/
+
+*.ttf
+*.otf
+*.jpg
+*.jpeg
+!docs/images/*.jpg
+!docs/images/*.png

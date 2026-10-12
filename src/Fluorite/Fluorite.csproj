@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- App.xaml generates its own Main; Program.Main is the real entry point. -->
+    <StartupObject>Launchpad.Program</StartupObject>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>12.0</LangVersion>
+    <AssemblyName>Fluorite</AssemblyName>
+    <RootNamespace>Fluorite</RootNamespace>
+    <ApplicationIcon>fluorite.ico</ApplicationIcon>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS0169;CS0414;CS0649;CA1416;SYSLIB0011</NoWarn>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Version>1.1.0</Version>
+    <Product>Fluorite</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Remove="Launchpad\App.xaml" />
+    <ApplicationDefinition Include="Launchpad\App.xaml" Generator="MSBuild:Compile"
+                           SubType="Designer" LogicalName="app.xaml" />
+    <Page Remove="Launchpad.Views\AppTileResources.xaml" />
+    <Page Remove="Launchpad.Views\LaunchpadWindow.xaml" />
+    <Page Remove="resources\proworkspacestyles.xaml" />
+    <Page Remove="resources\settingsstyles.xaml" />
+    <Page Remove="resources\styles.xaml" />
+    <Page Remove="resources\theme.highcontrast.xaml" />
+    <Page Remove="resources\theme.light.xaml" />
+    <Page Remove="resources\theme.macdark.xaml" />
+
+    <Page Include="Launchpad.Views\AppTileResources.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="views/apptileresources.xaml" />
+    <Page Include="Launchpad.Views\LaunchpadWindow.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="views/launchpadwindow.xaml" />
+    <Page Include="resources\proworkspacestyles.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="resources/proworkspacestyles.xaml" />
+    <Page Include="resources\settingsstyles.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="resources/settingsstyles.xaml" />
+    <Page Include="resources\styles.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="resources/styles.xaml" />
+    <Page Include="resources\theme.highcontrast.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="resources/theme.highcontrast.xaml" />
+    <Page Include="resources\theme.light.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="resources/theme.light.xaml" />
+    <Page Include="resources\theme.macdark.xaml" Generator="MSBuild:Compile"
+          SubType="Designer" LogicalName="resources/theme.macdark.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\logo-ui.png" LogicalName="assets/logo-ui.png" />
+    <Resource Include="assets\shaders\aurorafinish.ps" LogicalName="assets/shaders/aurorafinish.ps" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The decompiled sources already contain every member that CommunityToolkit.Mvvm's
+      [ObservableProperty] / [RelayCommand] source generators would emit, so running the
+      generators produces 700+ CS0102 "type already contains a definition" collisions.
+      The attributes stay in the source (the models still read the way they were written),
+      the generators are switched off, and the decompiled members are what actually compile.
+    -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <Target Name="RemoveMvvmSourceGenerators"
+          AfterTargets="ResolvePackageDependenciesForBuild;ResolveNuGetPackageAssets">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="'%(Analyzer.NuGetPackageId)' == 'CommunityToolkit.Mvvm'" />
+    </ItemGroup>
+  </Target>
+
+</Project>

@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <SolidColorBrush x:Key="AccentBrush" Color="#FF0A84FF" />
+  <SolidColorBrush x:Key="AccentDimBrush" Color="#330A84FF" />
+  <SolidColorBrush x:Key="CardBrush" Color="#06000000" />
+  <SolidColorBrush x:Key="CardHoverBrush" Color="#0B000000" />
+  <SolidColorBrush x:Key="CardLineBrush" Color="#211D1D1F" />
+  <SolidColorBrush x:Key="CardLineHoverBrush" Color="#331D1D1F" />
+  <SolidColorBrush x:Key="FavoriteGoldBrush" Color="#FFA8760A" />
+  <SolidColorBrush x:Key="GlossBrush" Color="#00FFFFFF" />
+  <SolidColorBrush x:Key="HairlineBrush" Color="#1FFFFFFF" />
+  <SolidColorBrush x:Key="HairlineStrongBrush" Color="#33FFFFFF" />
+  <SolidColorBrush x:Key="SheetAccentBrush" Color="#FF0A84FF" />
+  <SolidColorBrush x:Key="SheetDimBrush" Color="#A01D1D1F" />
+  <SolidColorBrush x:Key="SheetTextBrush" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="SheetValueBrush" Color="#FF0A5ABF" />
+  <SolidColorBrush x:Key="SliderFillBrush" Color="#FF0A84FF" />
+  <SolidColorBrush x:Key="T.AccBright_FF" Color="#FF4AA8FF" />
+  <Color x:Key="T.AccHi_FFc">#FF3D9BFF</Color>
+  <Color x:Key="T.AccLo_FFc">#FF0A72E8</Color>
+  <SolidColorBrush x:Key="T.AccPale_FF" Color="#FF0A5ABF" />
+  <SolidColorBrush x:Key="T.AccPure_FF" Color="#FF007AFF" />
+  <SolidColorBrush x:Key="T.AccText_FF" Color="#FF0A5ABF" />
+  <Color x:Key="T.Acc_14c">#140A84FF</Color>
+  <SolidColorBrush x:Key="T.Acc_26" Color="#260A84FF" />
+  <SolidColorBrush x:Key="T.Acc_42" Color="#420A84FF" />
+  <Color x:Key="T.Acc_4Dc">#4D0A84FF</Color>
+  <SolidColorBrush x:Key="T.Acc_8A" Color="#8A0A84FF" />
+  <Color x:Key="T.Acc_8Ac">#8A0A84FF</Color>
+  <SolidColorBrush x:Key="T.Acc_FF" Color="#FF0A84FF" />
+  <Color x:Key="T.BtnEnd_FFc">#FFE7EBF0</Color>
+  <Color x:Key="T.BtnHi_FFc">#FF1C7EDF</Color>
+  <SolidColorBrush x:Key="T.BtnLo_FF" Color="#FF0A5CAB" />
+  <Color x:Key="T.BtnLo_FFc">#FF0A5CAB</Color>
+  <Color x:Key="T.Card_B8c">#B8FFFFFF</Color>
+  <Color x:Key="T.Card_BEc">#BEFFFFFF</Color>
+  <Color x:Key="T.Card_C6c">#C6FFFFFF</Color>
+  <SolidColorBrush x:Key="T.Chip_F2" Color="#F2F5F6F9" />
+  <SolidColorBrush x:Key="T.Danger_FF" Color="#FFC0030B" />
+  <SolidColorBrush x:Key="T.Deep_20" Color="#05101826" />
+  <SolidColorBrush x:Key="T.Dot" Color="#FF1D1D1F" />
+  <Color x:Key="T.Fg_08c">#0A1D1D1F</Color>
+  <Color x:Key="T.Fg_0Ac">#0D1D1D1F</Color>
+  <SolidColorBrush x:Key="T.Fg_14" Color="#191D1D1F" />
+  <Color x:Key="T.Fg_14c">#191D1D1F</Color>
+  <SolidColorBrush x:Key="T.Fg_1A" Color="#211D1D1F" />
+  <Color x:Key="T.Fg_1Cc">#231D1D1F</Color>
+  <SolidColorBrush x:Key="T.Fg_1F" Color="#271D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_26" Color="#301D1D1F" />
+  <Color x:Key="T.Fg_26c">#301D1D1F</Color>
+  <SolidColorBrush x:Key="T.Fg_28" Color="#321D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_2E" Color="#3A1D1D1F" />
+  <Color x:Key="T.Fg_30c">#3C1D1D1F</Color>
+  <SolidColorBrush x:Key="T.Fg_33" Color="#401D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_38" Color="#461D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_40" Color="#501D1D1F" />
+  <Color x:Key="T.Fg_42c">#531D1D1F</Color>
+  <SolidColorBrush x:Key="T.Fg_5C" Color="#731D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_66" Color="#801D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_73" Color="#901D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_75" Color="#921D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_7A" Color="#991D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_80" Color="#A01D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_8A" Color="#AD1D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_D9" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_DC" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_F0" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_F2" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_F5" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_FF" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="T.Fl_0A" Color="#06000000" />
+  <SolidColorBrush x:Key="T.Fl_0F" Color="#09000000" />
+  <SolidColorBrush x:Key="T.Fl_10" Color="#0A000000" />
+  <SolidColorBrush x:Key="T.Fl_12" Color="#0B000000" />
+  <SolidColorBrush x:Key="T.Fl_14" Color="#0C000000" />
+  <SolidColorBrush x:Key="T.Fl_1A" Color="#10000000" />
+  <SolidColorBrush x:Key="T.Fl_1E" Color="#13000000" />
+  <SolidColorBrush x:Key="T.Fl_1F" Color="#13000000" />
+  <SolidColorBrush x:Key="T.Fl_20" Color="#14000000" />
+  <SolidColorBrush x:Key="T.Fl_24" Color="#16000000" />
+  <SolidColorBrush x:Key="T.Fl_2E" Color="#1D000000" />
+  <SolidColorBrush x:Key="T.Fl_33" Color="#20000000" />
+  <SolidColorBrush x:Key="T.Fl_38" Color="#23000000" />
+  <Color x:Key="T.Gl_05c">#03FFFFFF</Color>
+  <Color x:Key="T.Gl_07c">#04FFFFFF</Color>
+  <Color x:Key="T.Gl_08c">#04FFFFFF</Color>
+  <Color x:Key="T.Gl_0Ac">#05FFFFFF</Color>
+  <Color x:Key="T.Gl_0Dc">#07FFFFFF</Color>
+  <Color x:Key="T.Gl_12c">#09FFFFFF</Color>
+  <Color x:Key="T.Gl_14c">#0AFFFFFF</Color>
+  <Color x:Key="T.Gl_17c">#0CFFFFFF</Color>
+  <Color x:Key="T.Gl_1Ac">#0DFFFFFF</Color>
+  <Color x:Key="T.Gl_1Cc">#0EFFFFFF</Color>
+  <Color x:Key="T.Gl_22c">#11FFFFFF</Color>
+  <Color x:Key="T.Gl_24c">#12FFFFFF</Color>
+  <Color x:Key="T.Gl_26c">#13FFFFFF</Color>
+  <Color x:Key="T.Gl_2Ec">#17FFFFFF</Color>
+  <Color x:Key="T.Gl_30c">#18FFFFFF</Color>
+  <Color x:Key="T.Gl_42c">#21FFFFFF</Color>
+  <Color x:Key="T.Gl_FFc">#80FFFFFF</Color>
+  <Color x:Key="T.Glass1_A8c">#CAF7F8FA</Color>
+  <Color x:Key="T.Glass2_B0c">#D3F1F3F7</Color>
+  <Color x:Key="T.Glass3_B8c">#DDE9ECF2</Color>
+  <Color x:Key="T.GlowLo_2Ac">#2AFFFFFF</Color>
+  <Color x:Key="T.Glow_06c">#069FC4F2</Color>
+  <SolidColorBrush x:Key="T.Gray_FF" Color="#FF8E8E93" />
+  <SolidColorBrush x:Key="T.Knob" Color="#FFFFFFFF" />
+  <SolidColorBrush x:Key="T.Menu_EA" Color="#EAF7F7FA" />
+  <SolidColorBrush x:Key="T.NearWhite_EA" Color="#EA3A3F47" />
+  <SolidColorBrush x:Key="T.Ok_FF" Color="#FF137333" />
+  <SolidColorBrush x:Key="T.OnAcc" Color="#FFFFFFFF" />
+  <Color x:Key="T.Pill1_82c">#BDFFFFFF</Color>
+  <Color x:Key="T.Pill2_8Ac">#C8F6F7FA</Color>
+  <Color x:Key="T.Pill3_94c">#D7EDF0F5</Color>
+  <SolidColorBrush x:Key="T.Rp_14" Color="#14000000" />
+  <SolidColorBrush x:Key="T.Rp_1F" Color="#1F000000" />
+  <SolidColorBrush x:Key="T.SbGlow_2E" Color="#2E0A84FF" />
+  <SolidColorBrush x:Key="T.SbRing_33" Color="#330066CC" />
+  <SolidColorBrush x:Key="T.SbSelLo_B3" Color="#B355606E" />
+  <SolidColorBrush x:Key="T.SbSel_B3" Color="#B33A3F47" />
+  <SolidColorBrush x:Key="T.Scrim_7A" Color="#6E101826" />
+  <SolidColorBrush x:Key="T.Sheet_FF" Color="#FFFFFFFF" />
+  <SolidColorBrush x:Key="T.Solid_E0" Color="#E0FBFBFD" />
+  <SolidColorBrush x:Key="T.Window_FF" Color="#FFEFF0F3" />
+  <SolidColorBrush x:Key="TextPlaceholderBrush" Color="#A01D1D1F" />
+  <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FF1D1D1F" />
+  <SolidColorBrush x:Key="TextSecondaryBrush" Color="#DC1D1D1F" />
+  <SolidColorBrush x:Key="T.Veil" Color="#6005070C" />
+  <Color x:Key="T.Acc_FFc">#FF0A84FF</Color>
+  <SolidColorBrush x:Key="T.SearchBorder" Color="#291D1D1F" />
+  <SolidColorBrush x:Key="T.SearchBorderHover" Color="#401D1D1F" />
+  <SolidColorBrush x:Key="T.SearchBorderFocus" Color="#591D1D1F" />
+  <SolidColorBrush x:Key="T.SearchFocusFill" Color="#0A1D1D1F" />
+  <system:Double x:Key="T.VeilFloor" xmlns:system="clr-namespace:System;assembly=System.Private.CoreLib">0</system:Double>
+  <SolidColorBrush x:Key="T.Fg_4D" Color="#601D1D1F" />
+  <SolidColorBrush x:Key="T.Fg_0A" Color="#0D1D1D1F" />
+  <SolidColorBrush x:Key="T.ActiveChip" Color="#330A84FF" />
+  <SolidColorBrush x:Key="T.PresetGroup" Color="#FFF5F6F8" />
+  <SolidColorBrush x:Key="T.PresetCard" Color="#FFFFFFFF" />
+  <SolidColorBrush x:Key="T.PresetHover" Color="#FFF8FAFD" />
+  <SolidColorBrush x:Key="T.PresetSelected" Color="#FFEAF3FF" />
+</ResourceDictionary>

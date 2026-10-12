@@ -1,0 +1,989 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary x:Class="Launchpad.Views.AppTileResources" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:models="clr-namespace:Launchpad.Models" xmlns:infra="clr-namespace:Launchpad.Infrastructure" xmlns:views="clr-namespace:Launchpad.Views">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/Fluorite;component/Resources/Styles.xaml" />
+    <ResourceDictionary Source="/Fluorite;component/Resources/SettingsStyles.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+  <infra:LabelShadowConverter x:Key="LabelShadow" />
+  <Style x:Key="NameChipToolTipStyle" TargetType="{x:Type ToolTip}">
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+    <Setter Property="ToolTip.Placement" Value="Top" />
+    <Setter Property="ToolTip.VerticalOffset" Value="6" />
+    <Setter Property="ToolTip.HasDropShadow" Value="False" />
+    <Setter Property="Background" Value="{DynamicResource T.Chip_F2}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource T.Fg_26}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="10,4,10,5" />
+    <Setter Property="MaxWidth" Value="360" />
+    <Setter Property="FontFamily" Value="{DynamicResource AppFont}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToolTip}">
+          <Border Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="{TemplateBinding Control.BorderThickness}" CornerRadius="8">
+            <ContentPresenter Margin="{TemplateBinding Control.Padding}" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <DataTemplate x:Key="AppIconContent">
+    <Grid>
+      <Image RenderOptions.BitmapScalingMode="HighQuality" Stretch="Uniform" Margin="1" Source="{Binding Icon}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type Image}">
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+              <DataTrigger Value="{x:Static models:IconShape.Original}" Binding="{Binding DataContext.Settings.IconShape, RelativeSource={RelativeSource AncestorType=Window}}">
+                <Setter Property="Visibility" Value="Visible" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </Image>
+      <Border SnapsToDevicePixels="False" UseLayoutRounding="True" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Unspecified" BorderThickness="0.8" BorderBrush="{DynamicResource T.Fg_14}" CornerRadius="{Binding DataContext.IconCornerRadius, RelativeSource={RelativeSource AncestorType=Window}}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type Border}">
+            <Setter Property="Visibility" Value="Visible" />
+            <Style.Triggers>
+              <DataTrigger Value="{x:Static models:IconShape.Original}" Binding="{Binding DataContext.Settings.IconShape, RelativeSource={RelativeSource AncestorType=Window}}">
+                <Setter Property="Visibility" Value="Collapsed" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+        <Border.Background>
+          <ImageBrush Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Unspecified" ImageSource="{Binding Icon}" />
+        </Border.Background>
+      </Border>
+      <Path Name="PlaceholderIcon" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="32" Stretch="Uniform" Fill="{DynamicResource T.Fg_80}" Data="M4,2 L20,2 A2,2 0 0 1 22,4L22,16 A2,2 0 0 1 20,18L16,18 L12,22 L8,18 L4,18 A2,2 0 0 1 2,16L2,4 A2,2 0 0 1 4,2M4,4 L4,16 L8.83,16 L12,19.17 L15.17,16 L20,16 L20,4 L4,4">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type Path}">
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding Icon}" Value="{x:Null}">
+                <Setter Property="Visibility" Value="Visible" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </Path>
+    </Grid>
+  </DataTemplate>
+  <DataTemplate x:Key="FolderIconContent">
+    <Grid>
+      <Border BorderThickness="1" Padding="6.5" ClipToBounds="False" CornerRadius="{Binding DataContext.FolderCornerRadius, RelativeSource={RelativeSource AncestorType=Window}}">
+        <Border.BorderBrush>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#60FFFFFF" Offset="0.0" />
+            <GradientStop Color="#24FFFFFF" Offset="0.45" />
+            <GradientStop Color="#10FFFFFF" Offset="1.0" />
+          </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#3DFFFFFF" Offset="0.0" />
+            <GradientStop Color="#20FFFFFF" Offset="0.4" />
+            <GradientStop Color="#12FFFFFF" Offset="1.0" />
+          </LinearGradientBrush>
+        </Border.Background>
+        <UIElement.Effect>
+          <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="2.5" Direction="270" Opacity="0.32" />
+        </UIElement.Effect>
+        <Grid>
+          <Border IsHitTestVisible="False" CornerRadius="{Binding DataContext.FolderCornerRadius, RelativeSource={RelativeSource AncestorType=Window}}">
+            <Border.Background>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#20FFFFFF" Offset="0.0" />
+                <GradientStop Color="#06FFFFFF" Offset="0.3" />
+                <GradientStop Color="#00000000" Offset="0.6" />
+              </LinearGradientBrush>
+            </Border.Background>
+          </Border>
+          <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding PreviewChildren}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding PreviewGridSize}" Rows="{Binding PreviewGridSize}" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:Key="{DataTemplateKey {x:Type models:AppItem}}" DataType="{x:Type models:AppItem}">
+                <Border Margin="2" CornerRadius="5" ClipToBounds="True">
+                  <UIElement.Effect>
+                    <DropShadowEffect Color="#000000" BlurRadius="3" ShadowDepth="1" Direction="270" Opacity="0.22" />
+                  </UIElement.Effect>
+                  <Image RenderOptions.BitmapScalingMode="HighQuality" Stretch="Uniform" Source="{Binding Icon}" />
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Grid>
+      </Border>
+    </Grid>
+  </DataTemplate>
+  <DataTemplate x:Key="ClockFaceClassic">
+    <StackPanel VerticalAlignment="Center" Margin="9">
+      <Grid>
+        <views:ClockTextBlock FontSize="9" FontWeight="SemiBold" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type TextBlock}">
+              <Setter Property="Foreground" Value="{DynamicResource T.AccText_FF}" />
+              <Style.Triggers>
+                <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                  <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+        </views:ClockTextBlock>
+        <views:ClockTextBlock FontSize="8" HorizontalAlignment="Right" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockLunar}">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type TextBlock}">
+              <Setter Property="Foreground" Value="{DynamicResource T.Fg_80}" />
+              <Style.Triggers>
+                <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                  <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+        </views:ClockTextBlock>
+      </Grid>
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="0,7,0,5">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <views:ClockTextBlock FontFamily="Segoe UI Variable Display" FontWeight="SemiBold" Typography.NumeralAlignment="Tabular" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.ClockFontSize}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+          <views:ClockTextBlock Opacity="0.65" VerticalAlignment="Bottom" Margin="3,0,0,7" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds}" FontSize="{Binding Settings.ClockSecondsFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+        </StackPanel>
+      </Viewbox>
+      <Border Height="1" Background="{DynamicResource T.Fg_1A}" Margin="9,1,9,7" />
+      <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource T.Fg_80}" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </views:ClockTextBlock>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="ClockFaceMinimal">
+    <StackPanel VerticalAlignment="Center" Margin="9">
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="0,7,0,5">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <views:ClockTextBlock FontFamily="Segoe UI Variable Display" FontWeight="Light" Typography.NumeralAlignment="Tabular" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.ClockFontSize}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+          <views:ClockTextBlock Opacity="0.65" VerticalAlignment="Bottom" Margin="3,0,0,7" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds}" FontSize="{Binding Settings.ClockSecondsFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+        </StackPanel>
+      </Viewbox>
+      <Border Width="14" Height="2" CornerRadius="1" Background="{DynamicResource T.AccText_FF}" HorizontalAlignment="Center" Margin="0,1,0,9" />
+      <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource T.Fg_80}" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </views:ClockTextBlock>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="ClockFaceDigital">
+    <StackPanel VerticalAlignment="Center" Margin="9">
+      <Grid>
+        <views:ClockTextBlock Text="LOCAL TIME" FontSize="7" FontFamily="Consolas" views:ClockInk.Color="{Binding Settings.ClockTextColor}">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type TextBlock}">
+              <Setter Property="Foreground" Value="#93AAA7" />
+              <Style.Triggers>
+                <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                  <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+        </views:ClockTextBlock>
+        <Ellipse Width="4" Height="4" Fill="#A5DCC6" HorizontalAlignment="Right" />
+      </Grid>
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="0,7,0,5">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <views:ClockTextBlock FontFamily="Consolas" FontWeight="Normal" Typography.NumeralAlignment="Tabular" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.ClockFontSize}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#D5EFE5" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+          <views:ClockTextBlock Opacity="0.65" VerticalAlignment="Bottom" Margin="3,0,0,7" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds}" FontSize="{Binding Settings.ClockSecondsFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#D5EFE5" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+        </StackPanel>
+      </Viewbox>
+      <Border Height="1" Background="#2D4541" Margin="0,1,0,7" />
+      <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#93AAA7" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </views:ClockTextBlock>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="ClockFaceElegant">
+    <StackPanel VerticalAlignment="Center" Margin="9">
+      <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#88694B" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </views:ClockTextBlock>
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="0,7,0,5">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <views:ClockTextBlock FontFamily="Georgia" FontWeight="Normal" Typography.NumeralAlignment="Tabular" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.ClockFontSize}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#49382B" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+          <views:ClockTextBlock Opacity="0.65" VerticalAlignment="Bottom" Margin="3,0,0,7" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds}" FontSize="{Binding Settings.ClockSecondsFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#49382B" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+        </StackPanel>
+      </Viewbox>
+      <Border Width="24" Height="1" Background="#C0A27E" Margin="0,0,0,7" />
+      <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockLunar}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#88694B" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </views:ClockTextBlock>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="ClockFaceVibrant">
+    <StackPanel VerticalAlignment="Center" Margin="9">
+      <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#E0D6EA" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+      </views:ClockTextBlock>
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="0,7,0,5">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+          <views:ClockTextBlock FontFamily="Segoe UI Variable Display" FontWeight="SemiBold" Typography.NumeralAlignment="Tabular" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.ClockFontSize}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#FFFFFF" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+          <views:ClockTextBlock Opacity="0.65" VerticalAlignment="Bottom" Margin="3,0,0,7" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds}" FontSize="{Binding Settings.ClockSecondsFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#FFFFFF" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                    <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </views:ClockTextBlock>
+        </StackPanel>
+      </Viewbox>
+      <Border CornerRadius="6" Padding="7,3" HorizontalAlignment="Center">
+        <FrameworkElement.Style>
+          <Style TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="#20FFFFFF" />
+            <Style.Triggers>
+              <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                <Setter Property="Background" Value="#00FFFFFF" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </FrameworkElement.Style>
+        <views:ClockTextBlock FontSize="9" HorizontalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type TextBlock}">
+              <Setter Property="Foreground" Value="#EEE7F4" />
+              <Style.Triggers>
+                <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+                  <Setter Property="Foreground" Value="{DynamicResource T.Fg_FF}" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+        </views:ClockTextBlock>
+      </Border>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="ClockIconContent">
+    <Viewbox Stretch="Uniform">
+      <Grid Width="112" Height="112" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+        <Border CornerRadius="23" BorderThickness="1">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type Border}">
+              <Setter Property="Background" Value="{DynamicResource T.Chip_F2}" />
+              <Setter Property="BorderBrush" Value="{DynamicResource T.Fg_1A}" />
+              <Style.Triggers>
+                <DataTrigger Value="{x:Static models:ClockStyle.Digital}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                  <Setter Property="Background" Value="#172725" />
+                  <Setter Property="BorderBrush" Value="#334B46" />
+                </DataTrigger>
+                <DataTrigger Value="{x:Static models:ClockStyle.Elegant}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                  <Setter Property="Background" Value="#F3EBDD" />
+                  <Setter Property="BorderBrush" Value="#D9C8AD" />
+                </DataTrigger>
+                <DataTrigger Value="{x:Static models:ClockStyle.Vibrant}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                  <Setter Property="Background">
+                    <Setter.Value>
+                      <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#625789" Offset="0" />
+                        <GradientStop Color="#354C73" Offset="0.65" />
+                        <GradientStop Color="#254B58" Offset="1" />
+                      </LinearGradientBrush>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="BorderBrush" Value="#607F8EA9" />
+                </DataTrigger>
+                <DataTrigger Value="True" Binding="{Binding DataContext.Settings.ClockTransparentBackground, RelativeSource={RelativeSource AncestorType=Window}}">
+                  <Setter Property="Background" Value="#00FFFFFF" />
+                  <Setter Property="BorderBrush" Value="#00FFFFFF" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+          <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type ContentControl}">
+                <Setter Property="ContentTemplate" Value="{StaticResource ClockFaceClassic}" />
+                <Style.Triggers>
+                  <DataTrigger Value="{x:Static models:ClockStyle.Minimal}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ClockFaceMinimal}" />
+                  </DataTrigger>
+                  <DataTrigger Value="{x:Static models:ClockStyle.Digital}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ClockFaceDigital}" />
+                  </DataTrigger>
+                  <DataTrigger Value="{x:Static models:ClockStyle.Elegant}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ClockFaceElegant}" />
+                  </DataTrigger>
+                  <DataTrigger Value="{x:Static models:ClockStyle.Vibrant}" Binding="{Binding DataContext.Settings.ClockStyle, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ClockFaceVibrant}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+          </ContentControl>
+        </Border>
+      </Grid>
+    </Viewbox>
+  </DataTemplate>
+  <DataTemplate x:Key="SystemMonitorIconContent">
+    <Grid>
+      <Border BorderThickness="1" Padding="7, 5" ClipToBounds="False" CornerRadius="{Binding DataContext.IconCornerRadius, RelativeSource={RelativeSource AncestorType=Window}}">
+        <Border.BorderBrush>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#60FFFFFF" Offset="0.0" />
+            <GradientStop Color="#24FFFFFF" Offset="0.45" />
+            <GradientStop Color="#10FFFFFF" Offset="1.0" />
+          </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#40202030" Offset="0.0" />
+            <GradientStop Color="#28141420" Offset="0.5" />
+            <GradientStop Color="#160E0E18" Offset="1.0" />
+          </LinearGradientBrush>
+        </Border.Background>
+        <UIElement.Effect>
+          <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="2.5" Direction="270" Opacity="0.35" />
+        </UIElement.Effect>
+        <Grid>
+          <Border IsHitTestVisible="False" CornerRadius="{Binding DataContext.IconCornerRadius, RelativeSource={RelativeSource AncestorType=Window}}">
+            <Border.Background>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#22FFFFFF" Offset="0.0" />
+                <GradientStop Color="#06FFFFFF" Offset="0.3" />
+                <GradientStop Color="#00000000" Offset="0.6" />
+              </LinearGradientBrush>
+            </Border.Background>
+          </Border>
+          <Grid VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Row="0" Margin="0,0,0,2">
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Path Width="9" Height="9" Stretch="Uniform" Fill="{DynamicResource T.AccText_FF}" Margin="0,0,3,0" Data="M17,17 L7,17 L7,7 L17,7 M21,11 L21,9 L19,9 L19,7 C19,5.89 18.1,5 17,5 L15,5 L15,3 L13,3 L13,5 L11,5 L11,3 L9,3 L9,5 L7,5 C5.89,5 5,5.89 5,7 L5,9 L3,9 L3,11 L5,11 L5,13 L3,13 L3,15 L5,15 L5,17 A2,2 0 0 0 7,19L9,19 L9,21 L11,21 L11,19 L13,19 L13,21 L15,21 L15,19 L17,19 A2,2 0 0 0 19,17L19,15 L21,15 L21,13 L19,13 L19,11 M15,9 L9,9 L9,15 L15,15 L15,9" />
+                <TextBlock Text="硬件监控" FontSize="9.5" FontWeight="SemiBold" Foreground="{DynamicResource T.Fg_80}" />
+              </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="1" Margin="0,1,0,3">
+              <Grid Margin="0,0,0,1">
+                <TextBlock Text="CPU" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource T.AccText_FF}" HorizontalAlignment="Left" />
+                <TextBlock FontSize="9.5" FontWeight="Bold" Foreground="{DynamicResource T.Fg_FF}" HorizontalAlignment="Right" Text="{Binding DataContext.CpuUsage, StringFormat='{}{0:F0}%', RelativeSource={RelativeSource AncestorType=Window}}" />
+              </Grid>
+              <ProgressBar Height="4" Foreground="{DynamicResource T.Acc_FF}" Style="{StaticResource AppleCapsuleProgressBar}" Value="{Binding DataContext.CpuUsage, RelativeSource={RelativeSource AncestorType=Window}}" />
+            </StackPanel>
+            <StackPanel Grid.Row="2">
+              <Grid Margin="0,0,0,1">
+                <TextBlock Text="RAM" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource T.Fg_80}" HorizontalAlignment="Left" />
+                <TextBlock FontSize="9.5" FontWeight="Bold" Foreground="{DynamicResource T.Fg_FF}" HorizontalAlignment="Right" Text="{Binding DataContext.MemoryUsage, StringFormat='{}{0:F0}%', RelativeSource={RelativeSource AncestorType=Window}}" />
+              </Grid>
+              <ProgressBar Height="4" Foreground="{DynamicResource T.AccText_FF}" Style="{StaticResource AppleCapsuleProgressBar}" Value="{Binding DataContext.MemoryUsage, RelativeSource={RelativeSource AncestorType=Window}}" />
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </Border>
+    </Grid>
+  </DataTemplate>
+  <DataTemplate x:Key="AppItemDataTemplate" DataType="{x:Type models:AppItem}">
+    <Button Background="#00FFFFFF" BorderThickness="0" Focusable="False" Cursor="Hand" Command="{Binding DataContext.LaunchAppCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}" Click="OnAppButtonClick">
+      <FrameworkElement.ContextMenu>
+        <ContextMenu Style="{StaticResource MacContextMenuStyle}" DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+          <MenuItem Command="{Binding DataContext.LaunchAppCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MacMenuItemStyle}">
+                <Setter Property="Header" Value="打开应用" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding PlacementTarget.DataContext.IsFolder, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    <Setter Property="Header" Value="打开文件夹" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M8,5.14 L8,19.14 L19,12.14 L8,5.14" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="以管理员身份运行" Style="{StaticResource Win32AppOnlyMenuItemStyle}" Command="{Binding DataContext.RunAsAdminCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M12,1 L3,5 L3,11 C3,16.55 6.84,21.74 12,23 C17.16,21.74 21,16.55 21,11 L21,5 L12,1 M12,7 A2,2 0 0 1 14,9A2,2 0 0 1 12,11A2,2 0 0 1 10,9A2,2 0 0 1 12,7M12,13 C13.66,13 17,14.17 17,15.83 L17,17 L7,17 L7,15.83 C7,14.17 10.34,13 12,13" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="在文件夹中显示" Style="{StaticResource AppOnlyMenuItemStyle}" Command="{Binding DataContext.ShowInFolderCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M10,4 L4,4 C2.89,4 2,4.89 2,6 L2,18 A2,2 0 0 0 4,20L20,20 A2,2 0 0 0 22,18L22,8 C22,6.89 21.1,6 20,6 L12,6 L10,4" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="重命名…" Style="{StaticResource AppOnlyMenuItemStyle}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Click="OnMenuRenameApp">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M20.71,7.04 C21.1,6.65 21.1,6 20.71,5.63 L18.37,3.29 C18,2.9 17.35,2.9 16.96,3.29 L15.12,5.12 L18.87,8.87 M3,17.25 L3,21 L6.75,21 L17.81,9.93 L14.06,6.18 L3,17.25" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="恢复默认名称" Style="{StaticResource NameOverrideMenuItemStyle}" Command="{Binding DataContext.RestoreNameCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextSecondaryBrush}" Data="M13,3 A9,9 0 0 0 4,12L1,12 L4.89,15.89 L4.96,16.03 L9,12 L6,12 A7,7 0 0 1 13,5A7,7 0 0 1 20,12A7,7 0 0 1 13,19C11.07,19 9.32,18.21 8.06,16.94 L6.64,18.36 C8.23,19.95 10.5,21 13,21 A9,9 0 0 0 22,12A9,9 0 0 0 13,3" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="更换图标…" Style="{StaticResource AppOnlyMenuItemStyle}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Click="OnMenuChangeIcon">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M8.5,13.5 L11,16.5 L14.5,12 L19,17 L5,17 L8.5,13.5 M21,19 L21,5 C21,3.9 20.1,3 19,3 L5,3 C3.9,3 3,3.9 3,5 L3,19 C3,20.1 3.9,21 5,21 L19,21 C20.1,21 21,20.1 21,19" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="恢复默认图标" Style="{StaticResource IconOverrideMenuItemStyle}" Command="{Binding DataContext.RestoreIconCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextSecondaryBrush}" Data="M13,3 A9,9 0 0 0 4,12L1,12 L4.89,15.89 L4.96,16.03 L9,12 L6,12 A7,7 0 0 1 13,5A7,7 0 0 1 20,12A7,7 0 0 1 13,19C11.07,19 9.32,18.21 8.06,16.94 L6.64,18.36 C8.23,19.95 10.5,21 13,21 A9,9 0 0 0 22,12A9,9 0 0 0 13,3" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <Separator Style="{StaticResource MacMenuSeparatorStyle}" />
+          <MenuItem Command="{Binding DataContext.ToggleDockCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <FrameworkElement.Style>
+              <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource RootAppOnlyMenuItemStyle}">
+                <Setter Property="Header" Value="添加到 Dock" />
+                <Style.Triggers>
+                  <DataTrigger Value="True" Binding="{Binding PlacementTarget.DataContext.IsDock, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    <Setter Property="Header" Value="从 Dock 移除" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M5.5,16 L18.5,16 A1.5,1.5 0 0 1 18.5,19L5.5,19 A1.5,1.5 0 0 1 5.5,16M10,4 L14,4 L14,13.5 L10,13.5" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="新建文件夹并移入" Style="{StaticResource RootAppOnlyMenuItemStyle}" Command="{Binding DataContext.CreateFolderCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M19,13 L13,13 L13,19 L11,19 L11,13 L5,13 L5,11 L11,11 L11,5 L13,5 L13,11 L19,11 L19,13" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="从文件夹中移出" Style="{StaticResource InFolderOnlyMenuItemStyle}" Command="{Binding DataContext.RemoveFromFolderCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M14,2 L6,2 A2,2 0 0 0 4,4L4,20 A2,2 0 0 0 6,22L18,22 A2,2 0 0 0 20,20L20,8 L14,2 M13,9 L13,3.5 L18.5,9 L13,9 M12,19 L8,15 L11,15 L11,11 L13,11 L13,15 L16,15 L12,19" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="重命名" Style="{StaticResource FolderOnlyMenuItemStyle}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Click="OnMenuRenameFolder">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Data="M20.71,7.04 C21.1,6.65 21.1,6 20.71,5.63 L18.37,3.29 C18,2.9 17.35,2.9 16.96,3.29 L15.12,5.12 L18.87,8.87 M3,17.25 L3,21 L6.75,21 L17.81,9.93 L14.06,6.18 L3,17.25" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="解散文件夹" ToolTip="将文件夹内的应用移回启动台，不会删除应用" Style="{StaticResource FolderOnlyMenuItemStyle}" Command="{Binding DataContext.DissolveFolderCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Data="M19,13 L5,13 L5,11 L19,11 L19,13" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <Separator Style="{StaticResource AppOnlyMenuSeparatorStyle}" />
+          <MenuItem Header="移出启动台" Style="{StaticResource AppOnlyMenuItemStyle}" Command="{Binding DataContext.HideAppCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextSecondaryBrush}" Data="M11.83,9 L15,12.16 C15,12.11 15,12.05 15,12 A3,3 0 0 0 12,9C11.94,9 11.89,9 11.83,9 M7.53,9.8 L9.08,11.35 C9.03,11.56 9,11.77 9,12 A3,3 0 0 0 12,15C12.22,15 12.44,14.97 12.65,14.92 L14.2,16.47 C13.53,16.8 12.79,17 12,17 A5,5 0 0 1 7,12C7,11.21 7.2,10.47 7.53,9.8 M2,4.27 L4.28,6.55 L4.73,7 C3.08,8.3 1.78,10 1,12 C2.73,16.39 7,19.5 12,19.5 C13.55,19.5 15.03,19.2 16.38,18.66 L16.8,19.08 L19.73,22 L21,20.73 L3.27,3 M12,7 A5,5 0 0 1 17,12C17,12.64 16.87,13.26 16.64,13.82 L19.57,16.75 C20.72,15.41 21.6,13.8 22,12 C20.27,7.61 16,4.5 12,4.5 C10.6,4.5 9.27,4.75 8.05,5.23 L10.18,7.36 C10.74,7.13 11.35,7 12,7" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <Separator Style="{StaticResource AppOnlyMenuSeparatorStyle}" />
+          <MenuItem Header="移出" ToolTip="删除手动导入记录并移出启动台，不会卸载或删除原程序" Style="{StaticResource ManualOnlyMenuItemStyle}" Command="{Binding DataContext.RemoveManualAppCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextSecondaryBrush}" Data="M12,2 A10,10 0 0 0 2,12A10,10 0 0 0 12,22A10,10 0 0 0 22,12A10,10 0 0 0 12,2M17,13 L7,13 L7,11 L17,11 L17,13" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <Separator Style="{StaticResource AppOnlyMenuSeparatorStyle}" />
+          <MenuItem Header="卸载应用" Style="{StaticResource AppOnlyMenuItemStyle}" Command="{Binding DataContext.RequestUninstallCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource T.Gray_FF}" Data="M19,4 L15.5,4 L14.5,3 L9.5,3 L8.5,4 L5,4 L5,6 L19,6 M6,19 A2,2 0 0 0 8,21L16,21 A2,2 0 0 0 18,19L18,7 L6,7 L6,19" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="从桌面移除小组件" Style="{StaticResource WidgetOnlyMenuItemStyle}" Command="{Binding DataContext.RemoveWidgetCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+            <MenuItem.Icon>
+              <Path Width="14" Height="14" Stretch="Uniform" Fill="{DynamicResource TextPrimaryBrush}" Data="M19,4 L15.5,4 L14.5,3 L9.5,3 L8.5,4 L5,4 L5,6 L19,6 M6,19 A2,2 0 0 0 8,21L16,21 A2,2 0 0 0 18,19L18,7 L6,7 L6,19" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </ContextMenu>
+      </FrameworkElement.ContextMenu>
+      <Control.Template>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Border Name="CardBorder" Margin="11, 6, 11, 6" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#00FFFFFF" RenderTransformOrigin="0.5, 0.5" Width="{Binding DataContext.CardWidth, RelativeSource={RelativeSource AncestorType=Window}}" Height="{Binding DataContext.CardHeight, RelativeSource={RelativeSource AncestorType=Window}}">
+            <UIElement.RenderTransform>
+              <TransformGroup>
+                <ScaleTransform x:Name="CardScale" ScaleX="1.0" ScaleY="1.0" />
+                <TranslateTransform x:Name="CardTranslate" Y="0" />
+              </TransformGroup>
+            </UIElement.RenderTransform>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+              <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Name="IconBorder" CornerRadius="18" Background="#00FFFFFF" BorderBrush="#00FFFFFF" BorderThickness="0" ClipToBounds="False" views:IconMotion.Settings="{Binding DataContext.Settings, RelativeSource={RelativeSource AncestorType=Window}}" Width="{Binding DataContext.IconSize, RelativeSource={RelativeSource AncestorType=Window}}" Height="{Binding DataContext.IconSize, RelativeSource={RelativeSource AncestorType=Window}}">
+                  <Grid>
+                    <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Content="{Binding}">
+                      <FrameworkElement.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                          <Setter Property="ContentTemplate" Value="{StaticResource AppIconContent}" />
+                          <Style.Triggers>
+                            <DataTrigger Value="True" Binding="{Binding IsFolder}">
+                              <Setter Property="ContentTemplate" Value="{StaticResource FolderIconContent}" />
+                            </DataTrigger>
+                            <DataTrigger Value="True" Binding="{Binding IsWidget}">
+                              <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                  <DataTemplate>
+                                    <Grid />
+                                  </DataTemplate>
+                                </Setter.Value>
+                              </Setter>
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                              <MultiDataTrigger.Conditions>
+                                <Condition Value="True" Binding="{Binding IsWidget}" />
+                                <Condition Value="Clock" Binding="{Binding WidgetType}" />
+                              </MultiDataTrigger.Conditions>
+                              <Setter Property="ContentTemplate" Value="{StaticResource ClockIconContent}" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                              <MultiDataTrigger.Conditions>
+                                <Condition Value="True" Binding="{Binding IsWidget}" />
+                                <Condition Value="SystemMonitor" Binding="{Binding WidgetType}" />
+                              </MultiDataTrigger.Conditions>
+                              <Setter Property="ContentTemplate" Value="{StaticResource SystemMonitorIconContent}" />
+                            </MultiDataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </FrameworkElement.Style>
+                    </ContentControl>
+                  </Grid>
+                </Border>
+              </Grid>
+              <TextBlock Name="NameLabel" Margin="0, 8, 0, 0" FontWeight="Medium" TextAlignment="Center" TextTrimming="CharacterEllipsis" ToolTipService.InitialShowDelay="400" ToolTipService.ShowDuration="12000" Text="{Binding DisplayName}" FontSize="{Binding DataContext.Settings.AppNameFontSize, RelativeSource={RelativeSource AncestorType=Window}}" Visibility="{Binding DataContext.Settings.ShowAppNames, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource Bool2Vis}}" MaxWidth="{Binding DataContext.CardTextWidth, RelativeSource={RelativeSource AncestorType=Window}}">
+                <FrameworkElement.ToolTip>
+                  <ToolTip Style="{StaticResource NameChipToolTipStyle}" Content="{Binding DisplayName}" />
+                </FrameworkElement.ToolTip>
+                <UIElement.Effect>
+                  <MultiBinding Converter="{StaticResource LabelShadow}">
+                    <Binding Path="DataContext.Settings.AppNameShadow" RelativeSource="{RelativeSource AncestorType=Window}" />
+                    <Binding Path="Foreground" RelativeSource="{RelativeSource Self}" />
+                  </MultiBinding>
+                </UIElement.Effect>
+                <FrameworkElement.Style>
+                  <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                    <Style.Triggers>
+                      <DataTrigger Value="True" Binding="{Binding IsWidget}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                      </DataTrigger>
+                      <DataTrigger Value="{x:Static models:LabelInk.White}" Binding="{Binding DataContext.Settings.LabelInk, RelativeSource={RelativeSource AncestorType=Window}}">
+                        <Setter Property="Foreground" Value="#F2FFFFFF" />
+                      </DataTrigger>
+                      <DataTrigger Value="{x:Static models:LabelInk.Black}" Binding="{Binding DataContext.Settings.LabelInk, RelativeSource={RelativeSource AncestorType=Window}}">
+                        <Setter Property="Foreground" Value="#F21D1D1F" />
+                      </DataTrigger>
+                      <DataTrigger Value="FolderContents" Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                        <Setter Property="Foreground" Value="{DynamicResource SheetTextBrush}" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </FrameworkElement.Style>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Value="True" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" />
+                <Condition Value="False" Binding="{Binding DataContext.IsItemDragActive, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <Condition Value="False" Binding="{Binding DataContext.IsPageSwiping, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <Condition Value="False" Binding="{Binding DataContext.Settings.ReduceMotion, RelativeSource={RelativeSource AncestorType=Window}}" />
+              </MultiDataTrigger.Conditions>
+              <TriggerBase.EnterActions>
+                <BeginStoryboard Name="HoverLiftIn">
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleX" To="1.06" Duration="0:0:0.17">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0.18" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleY" To="1.06" Duration="0:0:0.17">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0.18" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                  </Storyboard>
+                </BeginStoryboard>
+              </TriggerBase.EnterActions>
+              <TriggerBase.ExitActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleX" To="1.0" Duration="0:0:0.20">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleY" To="1.0" Duration="0:0:0.20">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                  </Storyboard>
+                </BeginStoryboard>
+              </TriggerBase.ExitActions>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Value="True" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" />
+                <Condition Value="False" Binding="{Binding DataContext.IsPageSwiping, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <Condition Value="False" Binding="{Binding DataContext.Settings.ReduceMotion, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <Condition Value="False" Binding="{Binding DataContext.IsItemDragActive, RelativeSource={RelativeSource AncestorType=Window}}" />
+              </MultiDataTrigger.Conditions>
+              <TriggerBase.EnterActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleX" To="0.93" Duration="0:0:0.09">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0.22" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleY" To="0.93" Duration="0:0:0.09">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0.22" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                  </Storyboard>
+                </BeginStoryboard>
+              </TriggerBase.EnterActions>
+              <TriggerBase.ExitActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleX" To="1.0" Duration="0:0:0.16">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0.34" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation Storyboard.TargetName="CardScale" Storyboard.TargetProperty="ScaleY" To="1.0" Duration="0:0:0.16">
+                      <DoubleAnimation.EasingFunction>
+                        <infra:SpringEase Bounce="0.34" />
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                  </Storyboard>
+                </BeginStoryboard>
+              </TriggerBase.ExitActions>
+            </MultiDataTrigger>
+            <DataTrigger Value="True" Binding="{Binding DataContext.IsPageSwiping, RelativeSource={RelativeSource AncestorType=Window}}">
+              <Setter TargetName="CardBorder" Property="UIElement.RenderTransform" Value="{x:Null}" />
+            </DataTrigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Control.Template>
+    </Button>
+  </DataTemplate>
+  <DataTemplate x:Key="TopClockCapsuleContent">
+    <Border CornerRadius="14" BorderThickness="1" Padding="13,0,13,0" MinHeight="38" Cursor="Hand" ToolTip="系统时间 (点击打开系统日期与时间设置)">
+      <FrameworkElement.Style>
+        <Style TargetType="{x:Type Border}">
+          <Setter Property="Background">
+            <Setter.Value>
+              <SolidColorBrush Color="{DynamicResource T.Pill2_8Ac}" />
+            </Setter.Value>
+          </Setter>
+          <Setter Property="BorderBrush" Value="{DynamicResource T.SearchBorder}" />
+          <Setter Property="UIElement.RenderTransformOrigin" Value="0.5, 0.5" />
+          <Setter Property="RenderTransform">
+            <Setter.Value>
+              <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Setter.Value>
+          </Setter>
+          <Style.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="True">
+              <TriggerBase.EnterActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.03" Duration="0:0:0.18" />
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.03" Duration="0:0:0.18" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </TriggerBase.EnterActions>
+              <TriggerBase.ExitActions>
+                <BeginStoryboard>
+                  <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0.18" />
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0.18" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </TriggerBase.ExitActions>
+            </Trigger>
+            <DataTrigger Value="{x:Static models:ClockStyle.Minimal}" Binding="{Binding Settings.ClockStyle}">
+              <Setter Property="Border.Padding" Value="11,0,11,0" />
+            </DataTrigger>
+            <DataTrigger Value="{x:Static models:ClockStyle.Digital}" Binding="{Binding Settings.ClockStyle}">
+              <Setter Property="BorderBrush" Value="#403D8069" />
+            </DataTrigger>
+            <DataTrigger Value="{x:Static models:ClockStyle.Elegant}" Binding="{Binding Settings.ClockStyle}">
+              <Setter Property="BorderBrush" Value="#40FFD59E" />
+            </DataTrigger>
+            <DataTrigger Value="{x:Static models:ClockStyle.Vibrant}" Binding="{Binding Settings.ClockStyle}">
+              <Setter Property="BorderBrush" Value="#506F608E" />
+            </DataTrigger>
+            <DataTrigger Value="True" Binding="{Binding Settings.ClockTransparentBackground}">
+              <Setter Property="Background" Value="#00FFFFFF" />
+              <Setter Property="BorderBrush" Value="#00FFFFFF" />
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </FrameworkElement.Style>
+      <UIElement.InputBindings>
+        <MouseBinding Gesture="LeftClick" Command="{Binding OpenDateAndTimeSettingsCommand}" />
+      </UIElement.InputBindings>
+      <Grid VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type StackPanel}">
+              <Setter Property="Visibility" Value="Collapsed" />
+              <Style.Triggers>
+                <DataTrigger Value="{x:Static models:ClockStyle.Classic}" Binding="{Binding Settings.ClockStyle}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+          <Path Width="13" Height="13" Stretch="Uniform" Fill="{DynamicResource T.Fg_80}" Margin="0,0,7,0" Data="M12,20 A8,8 0 0 0 20,12A8,8 0 0 0 12,4A8,8 0 0 0 4,12A8,8 0 0 0 12,20M12,2 A10,10 0 0 1 22,12A10,10 0 0 1 12,22C6.47,22 2,17.5 2,12 A10,10 0 0 1 12,2M12.5,7 L12.5,12.25 L17,14.92 L16.25,16.15 L11,13 L11,7 L12.5,7" />
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <views:ClockTextBlock FontWeight="SemiBold" Foreground="{DynamicResource T.Fg_FF}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.TopClockFontSize}" />
+            <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="1,1,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds, StringFormat=:{0}}" FontSize="{Binding Settings.TopClockFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}" />
+          </StackPanel>
+          <Border Width="1" Height="11" Background="{DynamicResource T.Fg_1A}" Margin="8,0" VerticalAlignment="Center" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="5,0,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type StackPanel}">
+              <Setter Property="Visibility" Value="Collapsed" />
+              <Style.Triggers>
+                <DataTrigger Value="{x:Static models:ClockStyle.Minimal}" Binding="{Binding Settings.ClockStyle}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+          <views:ClockTextBlock FontWeight="Medium" Foreground="{DynamicResource T.Fg_FF}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.TopClockFontSize}" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="1,1,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds, StringFormat=:{0}}" FontSize="{Binding Settings.TopClockFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}" />
+          <views:ClockTextBlock Text=" · " Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="4,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type StackPanel}">
+              <Setter Property="Visibility" Value="Collapsed" />
+              <Style.Triggers>
+                <DataTrigger Value="{x:Static models:ClockStyle.Digital}" Binding="{Binding Settings.ClockStyle}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+          <Border Width="6" Height="6" CornerRadius="3" Background="#74B79B" Margin="0,0,7,0" VerticalAlignment="Center" />
+          <views:ClockTextBlock FontFamily="Consolas, Cascadia Code, Courier New" FontWeight="Bold" Foreground="#A3D2BD" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.TopClockFontSize}" />
+          <views:ClockTextBlock FontFamily="Consolas, Cascadia Code, Courier New" FontWeight="SemiBold" Foreground="#8CA99B" VerticalAlignment="Center" Margin="1,1,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds, StringFormat=:{0}}" FontSize="{Binding Settings.TopClockFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}" />
+          <Border Width="1" Height="11" Background="#30477966" Margin="8,0" VerticalAlignment="Center" />
+          <views:ClockTextBlock FontFamily="Consolas, Cascadia Code" Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type StackPanel}">
+              <Setter Property="Visibility" Value="Collapsed" />
+              <Style.Triggers>
+                <DataTrigger Value="{x:Static models:ClockStyle.Elegant}" Binding="{Binding Settings.ClockStyle}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+          <views:ClockTextBlock FontFamily="Georgia, Times New Roman" FontWeight="Normal" Foreground="{DynamicResource T.Fg_FF}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.TopClockFontSize}" />
+          <views:ClockTextBlock FontFamily="Georgia" Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="1,1,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds, StringFormat=:{0}}" FontSize="{Binding Settings.TopClockFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}" />
+          <Border Width="1" Height="11" Background="#30FFD59E" Margin="8,0" VerticalAlignment="Center" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.AccText_FF}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockLunar}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="6,0,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <FrameworkElement.Style>
+            <Style TargetType="{x:Type StackPanel}">
+              <Setter Property="Visibility" Value="Collapsed" />
+              <Style.Triggers>
+                <DataTrigger Value="{x:Static models:ClockStyle.Vibrant}" Binding="{Binding Settings.ClockStyle}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </FrameworkElement.Style>
+          <views:ClockTextBlock FontWeight="Bold" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockTime}" FontSize="{Binding Settings.TopClockFontSize}">
+            <TextBlock.Foreground>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#B4A2D1" Offset="0" />
+                <GradientStop Color="#83B7CC" Offset="1" />
+              </LinearGradientBrush>
+            </TextBlock.Foreground>
+          </views:ClockTextBlock>
+          <views:ClockTextBlock FontWeight="SemiBold" Foreground="#B4A2D1" VerticalAlignment="Center" Margin="1,1,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockSeconds, StringFormat=:{0}}" FontSize="{Binding Settings.TopClockFontSize}" Visibility="{Binding Settings.ClockShowSeconds, Converter={StaticResource Bool2Vis}}" />
+          <Border Width="1" Height="11" Background="{DynamicResource T.Fg_1A}" Margin="8,0" VerticalAlignment="Center" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDate}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+          <views:ClockTextBlock Foreground="{DynamicResource T.Fg_80}" VerticalAlignment="Center" Margin="5,0,0,0" views:ClockInk.Color="{Binding Settings.ClockTextColor}" Text="{Binding ClockDayOfWeek}" FontSize="{Binding Settings.TopClockDateFontSize}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </DataTemplate>
+  <DataTemplate x:Key="TopClockLargeContent">
+    <views:LargeClockDisplay Model="{Binding}" />
+  </DataTemplate>
+</ResourceDictionary>
