@@ -36,11 +36,14 @@ jobs:
           key: nuget-${{ runner.os }}-${{ hashFiles('src/Fluorite/Fluorite.csproj') }}
           restore-keys: nuget-${{ runner.os }}-
 
+      # Restore must name the runtime identifier too, otherwise the assets
+      # file has no net8.0-windows10.0.19041.0/win-x64 target and publish fails
+      # with NETSDK1047.
       - name: Restore
-        run: dotnet restore src/Fluorite/Fluorite.csproj
+        run: dotnet restore src/Fluorite/Fluorite.csproj -r win-x64
 
       - name: Build
-        run: dotnet build src/Fluorite/Fluorite.csproj -c Release --no-restore
+        run: dotnet build src/Fluorite/Fluorite.csproj -c Release -r win-x64 --no-restore
 
       - name: Publish (framework-dependent)
         run: >
@@ -53,8 +56,7 @@ jobs:
         shell: pwsh
         run: |
           $bad = Get-ChildItem -Path src -Recurse -File -Include `
-                  *.ttf, *.otf, *.jpg, *.jpeg, *.woff, *.woff2 |
-                  Where-Object { $_.FullName -notmatch 'icon-cache' }
+                  *.ttf, *.otf, *.jpg, *.jpeg, *.woff, *.woff2
           if ($bad) {
             Write-Error ("Found files that must not be committed:`n" +
                          ($bad.FullName -join "`n"))
@@ -83,6 +85,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Restore
+        run: dotnet restore src/Fluorite/Fluorite.csproj -r win-x64
+
       - name: Publish (self-contained, single file)
         run: >
           dotnet publish src/Fluorite/Fluorite.csproj
@@ -92,6 +97,7 @@ jobs:
           -o artifacts/self-contained
 
       - name: Package
+        id: pack
         shell: pwsh
         run: |
           $tag = $env:GITHUB_REF_NAME
@@ -99,35 +105,33 @@ jobs:
           $fd = "artifacts/Fluorite-$tag-win-x64-framework-dependent.zip"
           Compress-Archive -Path "artifacts/self-contained/Fluorite.exe" -DestinationPath $sc
           Compress-Archive -Path "artifacts/framework-dependent/*" -DestinationPath $fd
-          "sc=$sc`nfd=$fd" | Out-File artifacts/paths.txt
+          "sc=$sc" | Out-File -Append "$env:GITHUB_OUTPUT"
+          "fd=$fd" | Out-File -Append "$env:GITHUB_OUTPUT"
           Get-ChildItem artifacts/*.zip | Format-Table Name, Length
 
       - name: Create GitHub release
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $paths = @{}
-          Get-Content artifacts/paths.txt | ForEach-Object {
-            $k, $v = $_ -split '=', 2
-            $paths[$k] = $v
-          }
+          $tag  = $env:GITHUB_REF_NAME
+          $sc   = "${{ steps.pack.outputs.sc }}"
+          $fd   = "${{ steps.pack.outputs.fd }}"
+          $scNm = Split-Path $sc -Leaf
+          $fdNm = Split-Path $fd -Leaf
           $notes = @"
-          ## Fluorite $env:GITHUB_REF_NAME
+          ## Fluorite $tag
 
           A Windows app dock and launcher.
 
           | File | Notes |
           |---|---|
-          | ``$($paths.sc -split '/')[-1]`` | Self-contained, run directly, no .NET needed |
-          | ``$($paths.fd -split '/')[-1]`` | Framework-dependent, needs the .NET 8 Desktop Runtime |
+          | ``$scNm`` | Self-contained, run directly, no .NET needed |
+          | ``$fdNm`` | Framework-dependent, needs the .NET 8 Desktop Runtime |
 
           Unzip and run ``Fluorite.exe``. Requires Windows 10 1809 or newer, x64.
 
           Licensed under Apache-2.0.
           "@
-          gh release create $env:GITHUB_REF_NAME `
-            "$($paths.sc)#Self-contained" `
-            "$($paths.fd)#Framework-dependent" `
-            --title "Fluorite $env:GITHUB_REF_NAME" `
-            --notes "$notes"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh release create $tag "$sc#Self-contained" "$fd#Framework-dependent" `
+            --title "Fluorite $tag" --notes "$notes"
