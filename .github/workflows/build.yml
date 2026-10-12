@@ -1,0 +1,133 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  build:
+    name: Build and verify
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('src/Fluorite/Fluorite.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore src/Fluorite/Fluorite.csproj
+
+      - name: Build
+        run: dotnet build src/Fluorite/Fluorite.csproj -c Release --no-restore
+
+      - name: Publish (framework-dependent)
+        run: >
+          dotnet publish src/Fluorite/Fluorite.csproj
+          -c Release -r win-x64 --self-contained false
+          --no-restore -o artifacts/framework-dependent
+
+      # Guards against someone re-adding assets we cannot redistribute.
+      - name: Verify no redistributable assets crept in
+        shell: pwsh
+        run: |
+          $bad = Get-ChildItem -Path src -Recurse -File -Include `
+                  *.ttf, *.otf, *.jpg, *.jpeg, *.woff, *.woff2 |
+                  Where-Object { $_.FullName -notmatch 'icon-cache' }
+          if ($bad) {
+            Write-Error ("Found files that must not be committed:`n" +
+                         ($bad.FullName -join "`n"))
+            exit 1
+          }
+          Write-Host "Asset check passed."
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fluorite-framework-dependent
+          path: artifacts/framework-dependent
+          retention-days: 14
+
+  release:
+    name: Publish release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish (self-contained, single file)
+        run: >
+          dotnet publish src/Fluorite/Fluorite.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -o artifacts/self-contained
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $sc = "artifacts/Fluorite-$tag-win-x64-selfcontained.zip"
+          $fd = "artifacts/Fluorite-$tag-win-x64-framework-dependent.zip"
+          Compress-Archive -Path "artifacts/self-contained/Fluorite.exe" -DestinationPath $sc
+          Compress-Archive -Path "artifacts/framework-dependent/*" -DestinationPath $fd
+          "sc=$sc`nfd=$fd" | Out-File artifacts/paths.txt
+          Get-ChildItem artifacts/*.zip | Format-Table Name, Length
+
+      - name: Create GitHub release
+        shell: pwsh
+        run: |
+          $paths = @{}
+          Get-Content artifacts/paths.txt | ForEach-Object {
+            $k, $v = $_ -split '=', 2
+            $paths[$k] = $v
+          }
+          $notes = @"
+          ## Fluorite $env:GITHUB_REF_NAME
+
+          A Windows app dock and launcher.
+
+          | File | Notes |
+          |---|---|
+          | ``$($paths.sc -split '/')[-1]`` | Self-contained, run directly, no .NET needed |
+          | ``$($paths.fd -split '/')[-1]`` | Framework-dependent, needs the .NET 8 Desktop Runtime |
+
+          Unzip and run ``Fluorite.exe``. Requires Windows 10 1809 or newer, x64.
+
+          Licensed under Apache-2.0.
+          "@
+          gh release create $env:GITHUB_REF_NAME `
+            "$($paths.sc)#Self-contained" `
+            "$($paths.fd)#Framework-dependent" `
+            --title "Fluorite $env:GITHUB_REF_NAME" `
+            --notes "$notes"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
